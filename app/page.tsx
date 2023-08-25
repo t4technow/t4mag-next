@@ -1,95 +1,119 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Swiper from "@/components/sections/Swiper";
+import Grid from "@/components/sections/grid";
+import FeaturedTabbed from "@/components/sections/featured1";
+import TopStories from "@/components/sections/topStories";
+import Featured2 from "@/components/sections/featured2";
+import Style1 from "@/components/post/style1";
+import AdBanner from "@/components/adBanner";
+import UpperSideBar from "@/components/sections/sideBarUpper";
+import TagList from "@/components/sidebar/tags";
 
-export default function Home() {
+import { Category, Post, Tag } from "@/utils/types";
+
+import {
+  getAllPosts,
+  getCategories,
+  getPopularPosts,
+  getPosts,
+  getRecentPosts,
+  getTags,
+} from "@/services/apiService";
+import CategoryList from "@/components/sidebar/hotCategories";
+import PopularWidget from "@/components/post/popularWidget";
+
+
+const HomePage = async () => {
+
+  const posts: Post[] = await getPosts();
+  const allPosts: Post[] = await getAllPosts();
+  const recentPosts: Post[] = await getRecentPosts();
+  const popularPosts: Post[] = await getPopularPosts();
+  const categories: Category[] = await getCategories();
+  const tags: Tag[] = await getTags();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <section
+        className="rt-feature-section feature-section-style-1 overflow-hidden"
+        data-bg-image="images/elements/element_1.png"
+      >
+        <div className="container">
+          {posts !== null ? (
+            <Swiper posts={posts} />
+          ) : (
+            <h3>something went wrong</h3>
+          )}
         </div>
-      </div>
+      </section>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <section
+        className="rt-main-post-section main-post-section-style-1 section-padding"
+      >
+        <div className="container">
+          {recentPosts !== null ? (
+            <Grid posts={recentPosts} priority={true} size="md" />
+          ) : (
+            <h3>something went wrong</h3>
+          )}
+        </div>
+      </section>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+      <TopStories title="Top Stories" posts={posts} />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+      <section
+        className="whats-new-style-1 section-padding"
+      >
+        <div className="container">
+          <div className="row gutter-30 sticky-coloum-wrap">
+            <div className="col-xl-9 sticky-coloum-item">
+              <div className="featured-area-style-1 overflow-hidden">
+                {allPosts !== null && categories !== null ? (
+                  <FeaturedTabbed
+                    title="What’s New"
+                    categories={categories}
+                    posts={allPosts}
+                  />
+                ) : (
+                  <h3>something went wrong</h3>
+                )}
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+                <Featured2 title="Featured Style 2" posts={posts} />
+              </div>
+            </div>
+            <div className="col-xl-3 sticky-coloum-item sticky-sidebar">
+              <div className="rt-sidebar sticky-wrap">
+                <UpperSideBar posts={recentPosts} />
+                <TagList tagList={tags} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+      <section
+        className="section-padding"
+      >
+        <div className="container">
+          <div className="row gutter-24 sticky-coloum-wrap">
+            <div className="col-xl-9 sticky-coloum-item">
+              <div className="featured-area-style-1 sticky-wrap">
+                <Style1 posts={posts} title="Latest News" />
+                <AdBanner />
+              </div>
+            </div>
+            <div className="col-xl-3 sticky-coloum-item sticky-sidebar">
+              <div className="rt-sidebar sticky-wrap">
+                <PopularWidget posts={popularPosts} />
+                <CategoryList categoryList={categories} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+
+
+export default HomePage;
