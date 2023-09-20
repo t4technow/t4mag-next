@@ -8,8 +8,6 @@ import AdBanner from "@/components/adBanner";
 import UpperSideBar from "@/components/sections/sideBarUpper";
 import TagList from "@/components/sidebar/tags";
 
-import { Category, Post, Tag } from "@/utils/types";
-
 import {
   getAllPosts,
   getCategories,
@@ -24,27 +22,31 @@ import PopularWidget from "@/components/post/popularWidget";
 
 const HomePage = async () => {
 
-  const posts: Post[] = await getPosts();
-  const allPosts: Post[] = await getAllPosts();
-  const recentPosts: Post[] = await getRecentPosts();
-  const popularPosts: Post[] = await getPopularPosts();
-  const categories: Category[] = await getCategories();
-  const tags: Tag[] = await getTags();
+  const posts = await getPosts();
+  const allPosts = await getAllPosts();
+  const recentPosts = await getRecentPosts();
+  const popularPosts = await getPopularPosts();
+  const categories = await getCategories();
+  const tags = await getTags();
 
   return (
     <>
-      <section
-        className="rt-feature-section feature-section-style-1 overflow-hidden"
-        data-bg-image="images/elements/element_1.png"
-      >
-        <div className="container">
-          {posts !== null ? (
-            <Swiper posts={posts} />
-          ) : (
-            <h3>something went wrong</h3>
-          )}
-        </div>
-      </section>
+      {posts ? (
+        <section
+          className="rt-feature-section feature-section-style-1 overflow-hidden"
+          data-bg-image="images/elements/element_1.png"
+        >
+          <div className="container">
+            {posts !== null ? (
+              <Swiper posts={posts} />
+            ) : (
+              <h3>something went wrong</h3>
+            )}
+          </div>
+        </section>
+      ) : (
+        <h3>No Posts</h3>
+      )}
 
       <section
         className="rt-main-post-section main-post-section-style-1 section-padding"
@@ -58,7 +60,11 @@ const HomePage = async () => {
         </div>
       </section>
 
-      <TopStories title="Top Stories" posts={posts} />
+      {popularPosts ?
+        <TopStories title="Top Stories" posts={popularPosts} />
+        :
+        <h3>something went wrong</h3>
+      }
 
       <section
         className="whats-new-style-1 section-padding"
@@ -77,13 +83,25 @@ const HomePage = async () => {
                   <h3>something went wrong</h3>
                 )}
 
-                <Featured2 title="Featured Style 2" posts={posts} />
+                {posts ?
+                  <Featured2 title="Featured Style 2" posts={posts} />
+                  :
+                  <h3>something went wrong</h3>
+                }
               </div>
             </div>
             <div className="col-xl-3 sticky-coloum-item sticky-sidebar">
               <div className="rt-sidebar sticky-wrap">
-                <UpperSideBar posts={recentPosts} />
-                <TagList tagList={tags} />
+                {recentPosts ?
+                  <UpperSideBar posts={recentPosts} />
+                  :
+                  <h3>something went wrong</h3>
+                }
+                {tags ?
+                  <TagList tagList={tags} />
+                  :
+                  <h3>something went wrong</h3>
+                }
               </div>
             </div>
           </div>
@@ -97,14 +115,26 @@ const HomePage = async () => {
           <div className="row gutter-24 sticky-coloum-wrap">
             <div className="col-xl-9 sticky-coloum-item">
               <div className="featured-area-style-1 sticky-wrap">
-                <Style1 posts={posts} title="Latest News" />
+                {posts ?
+                  <Style1 posts={posts} title="Latest News" />
+                  :
+                  <h3>something went wrong</h3>
+                }
                 <AdBanner />
               </div>
             </div>
             <div className="col-xl-3 sticky-coloum-item sticky-sidebar">
               <div className="rt-sidebar sticky-wrap">
-                <PopularWidget posts={popularPosts} />
-                <CategoryList categoryList={categories} />
+                {popularPosts ?
+                  <PopularWidget posts={popularPosts} />
+                  :
+                  <h3>something went wrong</h3>
+                }
+                {categories ?
+                  <CategoryList categoryList={categories} />
+                  :
+                  <h3>something went wrong</h3>
+                }
               </div>
             </div>
           </div>

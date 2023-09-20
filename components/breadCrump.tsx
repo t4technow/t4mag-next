@@ -25,7 +25,7 @@ const BreadCrump = ({ post }: Props) => {
 							</li>
 						) : null}
 						<li className="breadcrumb-item active" aria-current="page">
-							<span className="rt-text-truncate">{post.title}</span>
+							{post && <span className="rt-text-truncate">{post.title}</span>}
 						</li>
 					</ol>
 				</nav>

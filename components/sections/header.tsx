@@ -1,25 +1,22 @@
-import React from "react";
+import React, { Suspense } from "react";
 import NavBar from "../header/navBar";
 import TopBar from "../header/topBar";
-import { Category, Post } from "@/utils/types";
 import { getCategories, getRecentPosts } from "@/services/apiService";
-
-type Props = {
-	recentPosts: Array<Post>;
-	categories: Array<Category>;
-};
 
 const Header = async () => {
 
-	const recentPosts: Post[] = await getRecentPosts();
-	const categories: Category[] = await getCategories();
+	const recentPosts = await getRecentPosts();
+	const categories = await getCategories();
 
 	return (
 		<header className="rt-header sticky-on">
 			<div id="sticky-placeholder"></div>
-			<TopBar recentPosts={recentPosts} />
-
-			<NavBar categories={categories} />
+			<Suspense fallback='loading...'>
+				<TopBar recentPosts={recentPosts} />
+			</Suspense>
+			<Suspense fallback='loading...'>
+				<NavBar categories={categories} />
+			</Suspense>
 		</header>
 	);
 };

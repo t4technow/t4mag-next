@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Post } from "@/utils/types";
 type Props = {
-	recentPosts: Array<Post>;
+	recentPosts: Array<Post> | null;
 };
 
 const TopBar = ({ recentPosts }: Props) => {
 	const [currentSlide, setCurrentSlide] = useState(0);
+
+	const options = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
+	const currentDate = new Date().toLocaleDateString('en-US', options);
 
 	useEffect(() => {
 		if (recentPosts && recentPosts.length > 0) {
@@ -31,7 +34,7 @@ const TopBar = ({ recentPosts }: Props) => {
 							</p>
 							<div className="rt-trending-slider1 swiper-container">
 								<div className="trending-wrapper">
-									{recentPosts.map((post, idx) => {
+									{recentPosts && recentPosts.map((post, idx) => {
 										const isActive = idx === currentSlide;
 										const isPrev =
 											idx === currentSlide - 1 ||
@@ -61,7 +64,7 @@ const TopBar = ({ recentPosts }: Props) => {
 							<div className="meta-wrap">
 								<span className="rt-meta">
 									<i className="far fa-calendar-alt icon"></i>
-									<span className="currentDate">DECEMBER 9, 2022</span>
+									<span className="currentDate">{currentDate.toUpperCase()}</span>
 								</span>
 							</div>
 							<div className="social-wrap d-none d-xl-block">

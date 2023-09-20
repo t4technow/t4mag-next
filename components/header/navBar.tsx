@@ -7,14 +7,14 @@ import styles from "./navBar.module.css";
 import { Category } from "@/utils/types";
 
 type Props = {
-	categories: Array<Category>;
+	categories: Array<Category> | null;
 };
 
 const NavBar = ({ categories }: Props) => {
 	const [isSticky, setIsSticky] = useState(false);
 
 	const user = {
-		is_authenticated: true,
+		is_authenticated: false,
 		profile_pic: { url: "/favicon.ico" },
 		is_author: true,
 		is_superuser: true,
@@ -116,7 +116,7 @@ const NavBar = ({ categories }: Props) => {
 											Categories{" "}
 										</Link>
 										<ul className="main-menu__dropdown">
-											{categories.map(
+											{categories && categories.map(
 												(category) =>
 													category.post_count > 0 && (
 														<li key={category.id}>
@@ -206,14 +206,14 @@ const NavBar = ({ categories }: Props) => {
 												</li>
 											) : (
 												<li>
-													<a href="{% url 'user_logout' %}">Logout</a>
+													<Link href="{% url 'user_logout' %}">Logout</Link>
 												</li>
 											)}
 										</>
 									) : (
 										<>
 											<li>
-												<a href="{% url 'user_login' %}">Login</a>
+												<Link href="/user/login">Login</Link>
 											</li>
 											<li>
 												<a href="{% url 'user_registration' %}">

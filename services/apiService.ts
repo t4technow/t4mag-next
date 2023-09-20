@@ -1,29 +1,31 @@
 import { baseUrl } from "@/config/constants";
+import { Category, CategoryDetails, FullPost, Post, Tag, TagDetails } from "@/utils/types";
 
-const fetchData = async (url: string) => {
+export const fetchData = async<T>(url: string): Promise<T | null> => {
 	try {
 		const response = await fetch(baseUrl+url, {
 			next: {
 				revalidate: 10
 			}
 		});
-		return response.json();
+		return response.json() as T;
 	} catch (error) {
 		console.error("Error fetching data:", error);
 		return null;
 	}
 };
 
-export const getPosts = () => fetchData("/posts/");
-export const getAllPosts = () => fetchData("");
-export const getRecentPosts = () => fetchData("/posts/recent/");
-export const getPopularPosts = () => fetchData("/posts/popular/");
+export const getPosts = () => fetchData<Post[]>("/posts/");
+export const getAllPosts = () => fetchData<Post[]>("");
+export const getRecentPosts = () => fetchData<Post[]>("/posts/recent/");
+export const getPopularPosts = () => fetchData<Post[]>("/posts/popular/");
+export const getPostDetails = (slug: string) => fetchData<FullPost>("/posts/"+slug)
 
-export const getCategories = () => fetchData("/categories/");
-export const getCategoryLatesPost = () => fetchData('categories/posts/latest/')
+export const getCategories = () => fetchData<Category[]>("/categories/");
+export const getCategoryLatestPost = () => fetchData<Post[]>('categories/posts/latest/')
 export const getCategoryDetails = (url?: string | string[]) =>
-	fetchData(`/categories/${url}/`);
+	fetchData<CategoryDetails>(`/categories/${url}/`);
 
-export const getTags = () => fetchData("/tags/");
+export const getTags = () => fetchData<Tag[]>("/tags/");
 export const getTagDetails = (url?: string | string[]) =>
-	fetchData(`/tags/${url}/`);
+	fetchData<TagDetails>(`/tags/${url}/`);
